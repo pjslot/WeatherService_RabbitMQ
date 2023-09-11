@@ -1,0 +1,15 @@
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\bin\Debug\net7.0\Rabbit_Weather.exe
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\bin\Debug\net7.0\Rabbit_Weather.deps.json
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\bin\Debug\net7.0\Rabbit_Weather.runtimeconfig.json
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\bin\Debug\net7.0\Rabbit_Weather.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\bin\Debug\net7.0\Rabbit_Weather.pdb
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.csproj.AssemblyReference.cache
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.AssemblyInfoInputs.cache
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.AssemblyInfo.cs
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.csproj.CoreCompileInputs.cache
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\refint\Rabbit_Weather.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.pdb
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\Rabbit_Weather.genruntimeconfig.cache
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rabbit_Weather\obj\Debug\net7.0\ref\Rabbit_Weather.dll

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "Rabbit_Weather/1.0.0": {
+        "runtime": {
+          "Rabbit_Weather.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Rabbit_Weather/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
