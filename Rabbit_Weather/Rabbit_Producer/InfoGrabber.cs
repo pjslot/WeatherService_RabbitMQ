@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,20 +9,21 @@ using System.Threading.Tasks;
 
 namespace Rabbit_Weather
 {
-	internal class InfoGrabber 
+	
+	internal class InfoGrabber
 	{
-		public static async void PrintInfo (Location loc)
+		//ручная печать прогноза для отладки
+		public static async Task PrintInfo (Location loc)
 		{
-			Console.WriteLine("Start");
+			Log.Information("PrintInfo Method Run:");
 			var wb = new WebClient();		
 			try
 			{			
 				string latStr = loc.latitude.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 				string lonStr = loc.longitude.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
-
-				Console.WriteLine("RESULT:");
-				var answer =  wb.DownloadString($"https://api.open-meteo.com/v1/forecast?latitude={latStr}&longitude={lonStr}&current_weather={loc.current_weather}");				
-				Console.WriteLine(answer.ToString());			
+				var answer = await wb.DownloadStringTaskAsync($"https://api.open-meteo.com/v1/forecast?latitude={latStr}&longitude={lonStr}&current_weather={loc.current_weather}");
+				Console.WriteLine(answer.ToString());
+				Log.Information("PrintInfo Method Succesfully Finished.");
 			}
 			catch(Exception e)
 			{
@@ -30,19 +32,19 @@ namespace Rabbit_Weather
 			finally
 			{
 				wb.Dispose();
-				Console.WriteLine("FINISHED. DISPOSED.");
 			}		
 		}
 
-		public dynamic ReturnInfo (Location loc)
+		//асинхронный возврат строки прогноза
+		 public static async Task<string> ReturnInfo (Location loc)
 		{
 			var wb = new WebClient();
 			try
 			{
 				string latStr = loc.latitude.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
 				string lonStr = loc.longitude.ToString("0.00", System.Globalization.CultureInfo.GetCultureInfo("en-US"));
-
-				var answer = wb.DownloadString($"https://api.open-meteo.com/v1/forecast?latitude={latStr}&longitude={lonStr}&current_weather=true");
+				var answer = await wb.DownloadStringTaskAsync($"https://api.open-meteo.com/v1/forecast?latitude={latStr}&longitude={lonStr}&current_weather=true");
+				//Log.Information("ReturnInfo Method Succesfully Finished.");
 				return answer;
 			}
 			catch (Exception e)
@@ -54,6 +56,7 @@ namespace Rabbit_Weather
 				wb.Dispose();
 			}
 			return null;
+
 		}
 	}
 }
