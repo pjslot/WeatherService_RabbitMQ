@@ -40,17 +40,19 @@ namespace Rabbit_Weather
 							.CreateLogger();
 
 			//тест кролика
-			try
-			{
-				Sender.SendMessage();
-			}
-			catch (Exception ex)
-			{
-				Log.Error(ex.Message);
-			}
+			//try
+			//{
+			//	Sender.SendMessage();
+			//}
+			//catch (Exception ex)
+			//{
+			//	Log.Error(ex.Message);
+			//}
 		
-			Console.WriteLine("done?");
-			Console.ReadLine();
+
+
+			//Console.WriteLine("done?");
+			//Console.ReadLine();
 
 
 
@@ -110,35 +112,37 @@ namespace Rabbit_Weather
 				//если температура изменилась
 				//if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.current_weather.temperature))
 				
-				//для показательности мониторим время генерации а не температуру
+				//для показательности мониторим время генерации запроса, а не температуру
 				if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.generationtime_ms))
 				{
 					//если поправили базу успешно
 					//	if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.current_weather.temperature))
 					if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.generationtime_ms))
 					{
-						//тут дёргаем зайца, но ещё ещё нету.
+						//сериализуем прогноз
+						ForecastRabbit forecastRabbit = new ForecastRabbit
+						{
+							cityName = allCities[i].cityName,
+							temperature = forecast.generationtime_ms
+						};
+						string forecastToGo = JsonSerializer.Serialize(forecastRabbit);	
+						
+						//дёргаем зайца
+						try
+						{
+							Sender.SendMessage(forecastToGo);
+							Log.Information($"New city {allCities[i].cityName} info sent to RabbutMQ succesfully.");
+						}
+						catch (Exception ex)
+						{
+							Log.Error(ex.Message);
+						}
 					};
 				}
 
 				Log.Information($"Работа с городом: {allCities[i++].cityName} завершена.");
-				Console.WriteLine("=======================================================");
-		
+				Console.WriteLine("=======================================================");	
 			}
-
-			
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 			//тест асинхронности ручных запросов
@@ -151,15 +155,7 @@ namespace Rabbit_Weather
 
 
 		}
-
-		
-
-		
-		//подвязка сервисов рэббит
-		//public void ConfigureServices(IServiceCollection services)
-		//{
-		//	services.AddScoped<Rabbit_Producer.RabbitMq.IRabbitMqService, Rabbit_Producer.RabbitMq.RabbitMqService>();
-		//}
+	
 	}
 
 	

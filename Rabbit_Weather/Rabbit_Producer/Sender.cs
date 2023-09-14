@@ -9,7 +9,7 @@ namespace Rabbit_Producer
 {
 	internal class Sender
 	{
-		public static void SendMessage()
+		public static void SendMessage(string forecastToGo)
 		{
 
 			var factory = new ConnectionFactory()
@@ -31,7 +31,7 @@ namespace Rabbit_Producer
 						autoDelete: false,
 						arguments: null);
 
-					var message = "WEATHER JSON";
+					var message = forecastToGo;
 					var body = Encoding.UTF8.GetBytes(message);
 					chanel.BasicPublish(exchange: "",
 						routingKey: "weatherQueue",
