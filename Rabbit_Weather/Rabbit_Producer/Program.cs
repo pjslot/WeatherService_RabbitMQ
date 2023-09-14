@@ -1,17 +1,28 @@
-﻿using System.Net.Http;
+﻿// Kabluchkov DS (c) 2023
+// firstRun info:
+// перед первым запуском раскомментировать EFWorker.DBPushData(); в Program, после закомменитировать обратно.
+// перед первым запуском раскомментироватьDatabase.EnsureDeleted(); //Database.EnsureCreated(); в EFWorker, после закомменитировать обратно.
+
+using System.Net.Http;
 using System.Net;
 using System;
 using System.Linq;
 using System.Text.Json;
-//поставлены NuGeеt: Serilog, Serilog.Sinks.Console, Serilog.Extensions.Hosting, Serilog.Sinks.File
+//поставлены NuGet: Serilog, Serilog.Sinks.Console, Serilog.Extensions.Hosting, Serilog.Sinks.File
 using Serilog;
 using Serilog.Core;
 using Rabbit_Producer;
 using Serilog.Sinks.SystemConsole.Themes;
-//поставлены NuGeеt: Microsoft.EntityFrameworkCore Microsoft.EntityFrameworkCore.SqlServer 
+//поставлены NuGеt: Microsoft.EntityFrameworkCore Microsoft.EntityFrameworkCore.SqlServer 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+//поставлен NuGet: RabbitMQ.Client
+using RabbitMQ.Client;
+using Microsoft.Extensions.Hosting;
 
+//добавлено
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Rabbit_Weather
 {
@@ -19,11 +30,30 @@ namespace Rabbit_Weather
 	{
 		public static void Main(string[] args)
 		{
+
+			
+
 			//инициализация логгера
 			Log.Logger = new LoggerConfiguration()
 							.WriteTo.Console()
 							.MinimumLevel.Debug()
 							.CreateLogger();
+
+			//тест кролика
+			try
+			{
+				Sender.SendMessage();
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex.Message);
+			}
+		
+			Console.WriteLine("done?");
+			Console.ReadLine();
+
+
+
 
 			//конфиг запроса
 			Location loc = new Location("Moscow", 55.45F, 37.36F, true) ;
@@ -43,8 +73,7 @@ namespace Rabbit_Weather
 			//таймаут запроса
 			int timeout = 5000;
 
-			ConsoleKeyInfo cki = new ConsoleKeyInfo();
-
+		
 			//получаем прогнозы
 		//	 while (true)
 		//		{
@@ -55,29 +84,49 @@ namespace Rabbit_Weather
 				List<string> collection = new List<string>(AsyncCollector.Returned());
 				Log.Information("All Cities Forecast Grabbed To List");
 
-				//десериализуем лист прогноза
-				foreach (string s in collection)
-				{
-					Forecast forecast = JsonSerializer.Deserialize<Forecast>(s);
-					Log.Debug("Weather requested for coordinates: {lat} : {lon}", forecast.latitude, forecast.longitude);
-					Console.WriteLine(forecast.current_weather.temperature);
-					Console.WriteLine(forecast.generationtime_ms);
-				}
-				Log.Information("Request finished");
-
-				Console.Write($"Timeout: {timeout}");
+				Console.WriteLine($"Timeout: {timeout}");
 
 			//запустить только раз при первом запуске, потом закомментировать.
 			//EFWorker.DBPushData();
 
-			//		Thread.Sleep(timeout);
+
+
+			//	Thread.Sleep(timeout);
 			//	Console.Clear();
 
 			//	} 
 
 
+			//едем по всей коллекции городов сграбленных с погодного сайта	
+			int i = 1;
 
-			Console.WriteLine(EFWorker.CityTempChecker("Taganrog", 995));
+			foreach (string city in collection)
+			{
+				Log.Information($"Работаем с городом: {allCities[i].cityName}");
+
+				//десериализуем прогноз
+				Forecast forecast = JsonSerializer.Deserialize<Forecast>(city);
+
+				//если температура изменилась
+				//if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.current_weather.temperature))
+				
+				//для показательности мониторим время генерации а не температуру
+				if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.generationtime_ms))
+				{
+					//если поправили базу успешно
+					//	if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.current_weather.temperature))
+					if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.generationtime_ms))
+					{
+						//тут дёргаем зайца, но ещё ещё нету.
+					};
+				}
+
+				Log.Information($"Работа с городом: {allCities[i++].cityName} завершена.");
+				Console.WriteLine("=======================================================");
+		
+			}
+
+			
 
 
 
@@ -99,6 +148,19 @@ namespace Rabbit_Weather
 			//	InfoGrabber.PrintInfo(loc4),
 			//	InfoGrabber.PrintInfo(loc5));
 
+
+
 		}
+
+		
+
+		
+		//подвязка сервисов рэббит
+		//public void ConfigureServices(IServiceCollection services)
+		//{
+		//	services.AddScoped<Rabbit_Producer.RabbitMq.IRabbitMqService, Rabbit_Producer.RabbitMq.RabbitMqService>();
+		//}
 	}
+
+	
 }

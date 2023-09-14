@@ -26,7 +26,7 @@ namespace Rabbit_Producer
 		public DbSet<City> Cities { get; set; }
 	
 		public ApplicationContext()
-		{
+		{		
 			//открывать только на первый запуск для инициализации базы, потом закрыть.
 			//Database.EnsureDeleted();
 			//Database.EnsureCreated();
@@ -36,8 +36,6 @@ namespace Rabbit_Producer
 			optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=CitiesDb;Trusted_Connection=True;");
 		}
 	}
-
-	
 
 	public class EFWorker
 	{
@@ -57,39 +55,64 @@ namespace Rabbit_Producer
 
 		}
 
-
+		//проверяем изменилась ли температура относительно базы
 		public static bool CityTempChecker(String cityName, float temperature)
 		{	
 			//чтение города
 			using (ApplicationContext context = new ApplicationContext())
-			{
-				Console.Clear();
+			{				
 				//если город нашёлся
 				if (context.Cities.Any(a => a.CityName == cityName))
 				{
-					Log.Information("Город НАЙДЕН.");
 					City city = context.Cities.First(a => a.CityName == cityName);
 					//сверяем температуру в базе с новой темературой
-					Console.WriteLine($"Темп в базе: {city.Temperature}");
-					Console.WriteLine($"Темп к сравнению: {temperature}");
+					Log.Information($"Температура в базе: {city.Temperature}");
+					Log.Information($"Температура на сайте: {temperature}");
 					if (city.Temperature==temperature)
 					{
-						Console.WriteLine("Температура не изменилась.");
+						Log.Information("Температура не изменилась. Ваимодействия с БД не требуется.");
 						return false;
 					}
 					else
 					{
-						Console.WriteLine("Температура НЕ СОВПАДАЕТ! НАДО ПИСАТЬ В БАЗУ!");
+						Log.Warning("Текущая температура не совпадает с температурой в базе данных. Запуск актуализации.");
 						return true;
 					}
 				}
 				else
 				{
-					Log.Information("Город не найден в базе.");
+					Log.Error("Город не найден в базе.");
 					return false;
 				}
 			}
 		}
+
+
+		//меняем температуру в базе на новую
+		public static bool EditCityTemp(String cityName, float newTemperature)
+		{
+			using (ApplicationContext context = new ApplicationContext())
+			{				
+				//если город есть в базе
+				if (context.Cities.Any(a => a.CityName == cityName))
+				{
+					City cityToChange = context.Cities.FirstOrDefault(a => a.CityName.Contains(cityName));
+					cityToChange.Temperature = newTemperature;
+					context.Cities.Update(cityToChange);		
+					context.SaveChanges();
+					Log.Information("Правка в базу внесена.");
+					return true;
+				}
+				else
+				{
+					Log.Error("Город не найден в базе.");
+					return false;
+				}
+			}
+		}
+
+
+
 
 
 	}
