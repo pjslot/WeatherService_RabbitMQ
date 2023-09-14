@@ -1,12 +1,17 @@
 ﻿using System.Net.Http;
 using System.Net;
 using System;
+using System.Linq;
 using System.Text.Json;
 //поставлены NuGeеt: Serilog, Serilog.Sinks.Console, Serilog.Extensions.Hosting, Serilog.Sinks.File
 using Serilog;
 using Serilog.Core;
 using Rabbit_Producer;
 using Serilog.Sinks.SystemConsole.Themes;
+//поставлены NuGeеt: Microsoft.EntityFrameworkCore Microsoft.EntityFrameworkCore.SqlServer 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
+
 
 namespace Rabbit_Weather
 {
@@ -21,11 +26,11 @@ namespace Rabbit_Weather
 							.CreateLogger();
 
 			//конфиг запроса
-			Location loc = new Location("One", 11.10F, 11.21F, true) ;
-			Location loc2 = new Location("Two", 21.10F, 21.21F, true);
-			Location loc3= new Location("Three", 31.10F, 31.21F, true);
-			Location loc4 = new Location("Four", 41.10F, 41.21F, true);
-			Location loc5 = new Location("Five", 51.10F, 51.21F, true);
+			Location loc = new Location("Moscow", 55.45F, 37.36F, true) ;
+			Location loc2 = new Location("Saint-Petersburg", 59.93F, 30.31F, true);
+			Location loc3= new Location("Omsk", 54.58F, 73.23F, true);
+			Location loc4 = new Location("Chelyabinsk", 55.09F, 61.24F, true);
+			Location loc5 = new Location("Taganrog", 47.14F, 38.54F, true);
 
 			Dictionary<int, Location> allCities = new Dictionary<int, Location>();
 		
@@ -41,8 +46,8 @@ namespace Rabbit_Weather
 			ConsoleKeyInfo cki = new ConsoleKeyInfo();
 
 			//получаем прогнозы
-			 while (true)
-				{
+		//	 while (true)
+		//		{
 
 				//обрабатываем все таски перед импортом
 				Task.WaitAll(AsyncCollector.Returner(allCities));
@@ -61,10 +66,31 @@ namespace Rabbit_Weather
 				Log.Information("Request finished");
 
 				Console.Write($"Timeout: {timeout}");
-				Thread.Sleep(timeout);
-				Console.Clear();
 
-			} 
+			//запустить только раз при первом запуске, потом закомментировать.
+			//EFWorker.DBPushData();
+
+			//		Thread.Sleep(timeout);
+			//	Console.Clear();
+
+			//	} 
+
+
+
+			Console.WriteLine(EFWorker.CityTempChecker("Taganrog", 995));
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 			//тест асинхронности ручных запросов
 			//Task.WaitAll(InfoGrabber.PrintInfo(loc),
