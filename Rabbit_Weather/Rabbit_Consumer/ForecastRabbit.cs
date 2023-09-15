@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rabbit_Producer
+namespace Rabbit_Consumer
 {
 	internal class ForecastRabbit
 	{
-		public string cityName { get; set; }
+		public string? cityName { get; set; }
 		public float temperature { get; set; }
 	}
 }

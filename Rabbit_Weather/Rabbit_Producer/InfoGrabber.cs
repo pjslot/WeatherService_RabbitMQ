@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace Rabbit_Weather
 {
-	
 	internal class InfoGrabber
 	{
 		//ручная печать прогноза для отладки

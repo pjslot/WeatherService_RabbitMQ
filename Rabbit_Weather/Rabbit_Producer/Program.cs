@@ -30,32 +30,11 @@ namespace Rabbit_Weather
 	{
 		public static void Main(string[] args)
 		{
-
-			
-
 			//инициализация логгера
 			Log.Logger = new LoggerConfiguration()
 							.WriteTo.Console()
 							.MinimumLevel.Debug()
 							.CreateLogger();
-
-			//тест кролика
-			//try
-			//{
-			//	Sender.SendMessage();
-			//}
-			//catch (Exception ex)
-			//{
-			//	Log.Error(ex.Message);
-			//}
-		
-
-
-			//Console.WriteLine("done?");
-			//Console.ReadLine();
-
-
-
 
 			//конфиг запроса
 			Location loc = new Location("Moscow", 55.45F, 37.36F, true) ;

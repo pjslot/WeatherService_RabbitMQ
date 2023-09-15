@@ -12,7 +12,7 @@ namespace Rabbit_Consumer
 	internal class Reader
 	{
 
-		public static string ReadMessage()
+		public static List<string> ReadMessage()
 		{
 
 			var factory = new ConnectionFactory()
@@ -41,17 +41,21 @@ namespace Rabbit_Consumer
 					//	Console.WriteLine(message);						
 					//};
 
+					List<string> all = new List<string>();
+
 					consumer.Received += (model, es) =>
 					{
 						var body = es.Body.ToArray();
 						var message = Encoding.UTF8.GetString(body);
 						Console.WriteLine(message);
+						all.Add(message);
 						Console.WriteLine("город принят!");
+						
 						//написать что-то чтоб строку выкидывало наружу
 						//либо тут десериализовать и уже наваливать в базу
 					};
-						
-						
+
+				
 						
 
 					chanel.BasicConsume(queue: "weatherQueue",
@@ -59,7 +63,7 @@ namespace Rabbit_Consumer
 						consumer: consumer
 						);
 
-					return null; //!!!
+					return all;
 				}
 			}
 		}
