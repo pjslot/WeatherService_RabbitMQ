@@ -54,10 +54,10 @@ namespace Rabbit_Weather
 			//таймаут запроса
 			int timeout = 5000;
 
-		
+
 			//получаем прогнозы
-		//	 while (true)
-		//		{
+			while (true)
+			{
 
 				//обрабатываем все таски перед импортом
 				Task.WaitAll(AsyncCollector.Returner(allCities));
@@ -67,75 +67,68 @@ namespace Rabbit_Weather
 
 				Console.WriteLine($"Timeout: {timeout}");
 
-			//запустить только раз при первом запуске, потом закомментировать.
-			//EFWorker.DBPushData();
+				//запустить только раз при первом запуске, потом закомментировать.
+				//EFWorker.DBPushData();
 
+				Thread.Sleep(timeout);
+				Console.Clear();
 
+				//едем по всей коллекции городов сграбленных с погодного сайта	
+				int i = 1;
 
-			//	Thread.Sleep(timeout);
-			//	Console.Clear();
-
-			//	} 
-
-
-			//едем по всей коллекции городов сграбленных с погодного сайта	
-			int i = 1;
-
-			foreach (string city in collection)
-			{
-				Log.Information($"Работаем с городом: {allCities[i].cityName}");
-
-				//десериализуем прогноз
-				Forecast forecast = JsonSerializer.Deserialize<Forecast>(city);
-
-				//если температура изменилась
-				//if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.current_weather.temperature))
-				
-				//для показательности мониторим время генерации запроса, а не температуру
-				if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.generationtime_ms))
+				foreach (string city in collection)
 				{
-					//если поправили базу успешно
-					//	if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.current_weather.temperature))
-					if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.generationtime_ms))
+					Log.Information($"Работаем с городом: {allCities[i].cityName}");
+
+					//десериализуем прогноз
+					Forecast forecast = JsonSerializer.Deserialize<Forecast>(city);
+
+					//если температура изменилась
+					//if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.current_weather.temperature))
+
+					//для показательности мониторим время генерации запроса, а не температуру
+					if (EFWorker.CityTempChecker(allCities[i].cityName, forecast.generationtime_ms))
 					{
-						//сериализуем прогноз
-						ForecastRabbit forecastRabbit = new ForecastRabbit
+						//если поправили базу успешно
+						//	if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.current_weather.temperature))
+						if (EFWorker.EditCityTemp(allCities[i].cityName, forecast.generationtime_ms))
 						{
-							cityName = allCities[i].cityName,
-							temperature = forecast.generationtime_ms
+							//сериализуем прогноз
+							ForecastRabbit forecastRabbit = new ForecastRabbit
+							{
+								cityName = allCities[i].cityName,
+								temperature = forecast.generationtime_ms
+							};
+							string forecastToGo = JsonSerializer.Serialize(forecastRabbit);
+
+							//дёргаем зайца
+							try
+							{
+								Sender.SendMessage(forecastToGo);
+								Log.Information($"New city {allCities[i].cityName} info sent to RabbutMQ succesfully.");
+							}
+							catch (Exception ex)
+							{
+								Log.Error(ex.Message);
+							}
 						};
-						string forecastToGo = JsonSerializer.Serialize(forecastRabbit);	
-						
-						//дёргаем зайца
-						try
-						{
-							Sender.SendMessage(forecastToGo);
-							Log.Information($"New city {allCities[i].cityName} info sent to RabbutMQ succesfully.");
-						}
-						catch (Exception ex)
-						{
-							Log.Error(ex.Message);
-						}
-					};
+					}
+
+					Log.Information($"Работа с городом: {allCities[i++].cityName} завершена.");
+					Console.WriteLine("=======================================================");
 				}
 
-				Log.Information($"Работа с городом: {allCities[i++].cityName} завершена.");
-				Console.WriteLine("=======================================================");	
+				//тест асинхронности ручных запросов
+				//Task.WaitAll(InfoGrabber.PrintInfo(loc),
+				//	InfoGrabber.PrintInfo(loc2),
+				//	InfoGrabber.PrintInfo(loc3),
+				//	InfoGrabber.PrintInfo(loc4),
+				//	InfoGrabber.PrintInfo(loc5));
+
 			}
-
-
-			//тест асинхронности ручных запросов
-			//Task.WaitAll(InfoGrabber.PrintInfo(loc),
-			//	InfoGrabber.PrintInfo(loc2),
-			//	InfoGrabber.PrintInfo(loc3),
-			//	InfoGrabber.PrintInfo(loc4),
-			//	InfoGrabber.PrintInfo(loc5));
-
-
 
 		}
 	
 	}
-
 	
 }

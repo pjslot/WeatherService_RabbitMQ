@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,14 +34,6 @@ namespace Rabbit_Consumer
 
 					var consumer = new EventingBasicConsumer(chanel);
 
-
-					//consumer.Received += (model, es) =>
-					//{
-					//	var body = es.Body.ToArray();
-					//	var message = Encoding.UTF8.GetString(body);						
-					//	Console.WriteLine(message);						
-					//};
-
 					List<string> all = new List<string>();
 
 					consumer.Received += (model, es) =>
@@ -49,10 +42,7 @@ namespace Rabbit_Consumer
 						var message = Encoding.UTF8.GetString(body);
 						Console.WriteLine(message);
 						all.Add(message);
-						Console.WriteLine("город принят!");
-						
-						//написать что-то чтоб строку выкидывало наружу
-						//либо тут десериализовать и уже наваливать в базу
+						Log.Information("City accepted from the Rabbit queue.");
 					};
 
 				

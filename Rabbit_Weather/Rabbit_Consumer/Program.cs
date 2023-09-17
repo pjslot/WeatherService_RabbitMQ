@@ -1,8 +1,13 @@
-﻿using Rabbit_Producer;
+﻿// Kabluchkov DS (c) 2023
+// firstRun info:
+// перед первым запуском раскомментироватьDatabase.EnsureDeleted(); //Database.EnsureCreated(); в EFWorker, после закомменитировать обратно.
+
 using Serilog;
+using Serilog.Core;
 using System.Reflection;
 using System.Text.Json;
 using System.Threading;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Rabbit_Consumer
 {
@@ -10,40 +15,44 @@ namespace Rabbit_Consumer
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine("Hello, World!");
+			//таймер
+			int timer = 5000;
+
+			//инициализация логгера
+			Log.Logger = new LoggerConfiguration()
+							.WriteTo.Console()
+							.MinimumLevel.Debug()
+							.CreateLogger();
 
 			List<string> list = new List<string>();
 
-			//зацикливание. пока приглушено.
-			//while (true)
-			//{
+			//зацикливание
+			while (true)
+			{
 				try
 				{
 					list = Reader.ReadMessage();
-					if (list.Count == 0) Console.WriteLine("Разбор очереди окончен или очередь пуста.");
-
-					
-						foreach (string l in list)
+					Log.Information("City list grabbing from Rabbit...");
+					if (list.Count == 0) Log.Information("Queue work finished or queue is empty.");
+					else				
+						foreach (string l in list.ToList())
 						{
-							Console.WriteLine(l);
-							Console.WriteLine("Вывели наружу, десериализуем");
-						
+						Log.Information($"City {l} grabbed. Deserialising...", l);
 						//десериализуем
 						ForecastRabbit? forecast = JsonSerializer.Deserialize<ForecastRabbit>(l);
-
-						//ищем город в текущей базе и решаем - добавлять новый или обновлять имеющицся
-						Console.WriteLine(forecast?.cityName + forecast?.temperature);
-						}					
-					
+						//ищем город в текущей базе и решаем - добавлять новый или обновлять имеющийся
+						Log.Information("Pushing to DB worker...");
+						EFWorker.CityEditOrCreate(forecast.cityName, forecast.temperature);					
+						}										
 				}
 				catch (Exception ex)
 				{
 					Log.Error(ex.Message);
 				}
 
-				Thread.Sleep(5000);
-				
-			//}
+				Log.Information($"Timer sleep: {timer}", timer);
+			Thread.Sleep(timer);				
+			}
 			//конец зацикливания
 		}
 	}
