@@ -1,3 +1,6 @@
+using Serilog;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -23,3 +26,8 @@ app.MapControllers();
 
 app.Run();
 
+//инициализация логгера
+Log.Logger = new LoggerConfiguration()
+				.WriteTo.Console()
+				.MinimumLevel.Debug()
+				.CreateLogger();

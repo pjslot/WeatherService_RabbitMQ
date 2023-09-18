@@ -31,3 +31,8 @@ C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weat
 C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\obj\Debug\net7.0\Rest_Weather_API.pdb
 C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\obj\Debug\net7.0\Rest_Weather_API.genruntimeconfig.cache
 C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\obj\Debug\net7.0\ref\Rest_Weather_API.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\bin\Debug\net7.0\Serilog.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\bin\Debug\net7.0\Serilog.Extensions.Hosting.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\bin\Debug\net7.0\Serilog.Extensions.Logging.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\bin\Debug\net7.0\Serilog.Sinks.Console.dll
+C:\Users\pjslo\Documents\GitHub\WeatherService_RabbitMQ\Rabbit_Weather\Rest_Weather_API\bin\Debug\net7.0\Serilog.Sinks.File.dll

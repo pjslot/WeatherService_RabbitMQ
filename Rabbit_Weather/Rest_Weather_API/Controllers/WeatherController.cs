@@ -4,6 +4,7 @@ using Rest_Weather_API.Controllers;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
+using Serilog;
 
 namespace Rest_Weather_API.Controllers
 {
@@ -15,7 +16,8 @@ namespace Rest_Weather_API.Controllers
 		//правила пользования - например: https://localhost:7234/api/weather/59.93/30.31
 		[HttpGet("{lat}/{lon}")]
 		public string Get(float lat, float lon)
-		{		
+		{
+			Log.Information("GET request initialized...");
 			return $"Temp in (lat:{lat.ToString()}-lon:{lon.ToString()}) is C: "+GiveMeTemp(ReturnInfo(lat, lon));
 		}
 
@@ -37,7 +39,7 @@ namespace Rest_Weather_API.Controllers
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine($"ERROR!: {e.Message}");
+				Log.Error($"ERROR!: {e.Message}");
 			}
 			finally
 			{
