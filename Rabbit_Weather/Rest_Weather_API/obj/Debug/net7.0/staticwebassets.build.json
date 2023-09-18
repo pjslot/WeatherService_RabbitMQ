@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "SGXXhOsEwxF98s2MSoZBMHzBC7mpwxPbM6NEKIwrh0U=",
+  "Source": "Rest_Weather_API",
+  "BasePath": "_content/Rest_Weather_API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

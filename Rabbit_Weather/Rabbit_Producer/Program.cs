@@ -1,7 +1,7 @@
 ﻿// Kabluchkov DS (c) 2023
 // firstRun info:
 // перед первым запуском раскомментировать EFWorker.DBPushData(); в Program, после закомменитировать обратно.
-// перед первым запуском раскомментироватьDatabase.EnsureDeleted(); //Database.EnsureCreated(); в EFWorker, после закомменитировать обратно.
+// перед первым запуском раскомментировать Database.EnsureDeleted(); //Database.EnsureCreated(); в EFWorker, после закомменитировать обратно.
 
 using System.Net.Http;
 using System.Net;
@@ -58,20 +58,15 @@ namespace Rabbit_Weather
 			//получаем прогнозы
 			while (true)
 			{
-
 				//обрабатываем все таски перед импортом
 				Task.WaitAll(AsyncCollector.Returner(allCities));
 
 				List<string> collection = new List<string>(AsyncCollector.Returned());
 				Log.Information("All Cities Forecast Grabbed To List");
-
-				Console.WriteLine($"Timeout: {timeout}");
+				Console.Clear();
 
 				//запустить только раз при первом запуске, потом закомментировать.
 				//EFWorker.DBPushData();
-
-				Thread.Sleep(timeout);
-				Console.Clear();
 
 				//едем по всей коллекции городов сграбленных с погодного сайта	
 				int i = 1;
@@ -105,7 +100,7 @@ namespace Rabbit_Weather
 							try
 							{
 								Sender.SendMessage(forecastToGo);
-								Log.Information($"New city {allCities[i].cityName} info sent to RabbutMQ succesfully.");
+								Log.Information($"New city {allCities[i].cityName} info sent to RabbitMQ succesfully.");
 							}
 							catch (Exception ex)
 							{
@@ -125,6 +120,10 @@ namespace Rabbit_Weather
 				//	InfoGrabber.PrintInfo(loc4),
 				//	InfoGrabber.PrintInfo(loc5));
 
+
+				Log.Information("Timeout.");
+				Thread.Sleep(timeout);
+				Console.Clear();
 			}
 
 		}

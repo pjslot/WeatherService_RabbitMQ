@@ -39,21 +39,7 @@ namespace Rabbit_Consumer
 
 	public class EFWorker
 	{
-		//создание экземпляров сущностей, запускать только раз при старте проекта, потом закомментировать
-		//public static void DBPushData()
-		//{		
-		//	using (ApplicationContext context = new ApplicationContext())
-		//	{
-		//		City c1 = new City { CityName = "Moscow", Temperature = 991, GenerationTime = 0};
-		//		City c2 = new City { CityName = "Saint-Petersburg", Temperature = 992, GenerationTime = 0 };
-		//		City c3 = new City { CityName = "Omsk", Temperature = 993, GenerationTime = 0 };
-		//		City c4 = new City { CityName = "Chelyabinsk", Temperature = 994, GenerationTime = 0 };
-		//		City c5 = new City { CityName = "Taganrog", Temperature = 995, GenerationTime = 0 };
-		//		context.Cities.AddRange(c1, c2, c3, c4, c5);
-		//		context.SaveChanges();
-		//	}
-		//}
-
+		
 		//правка существующей либо добавление новой сущности
 		public static bool CityEditOrCreate(String cityName, float newTemperature)
 		{

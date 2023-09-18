@@ -37,7 +37,7 @@ namespace Rabbit_Producer
 						routingKey: "weatherQueue",
 						basicProperties: null,
 						body: body);
-					Console.WriteLine(message+"done!");
+					//Console.WriteLine(message+"done!");
 				}
 			}
 		}

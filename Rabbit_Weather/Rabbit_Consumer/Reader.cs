@@ -45,9 +45,6 @@ namespace Rabbit_Consumer
 						Log.Information("City accepted from the Rabbit queue.");
 					};
 
-				
-						
-
 					chanel.BasicConsume(queue: "weatherQueue",
 						autoAck: true,
 						consumer: consumer
