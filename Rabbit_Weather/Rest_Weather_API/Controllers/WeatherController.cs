@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Rest_Weather_API.Controllers;
-using Rest_Weather_API.Models;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
-using Rest_Weather_API.Models; 
 
 namespace Rest_Weather_API.Controllers
 {
@@ -18,7 +16,7 @@ namespace Rest_Weather_API.Controllers
 		[HttpGet("{lat}/{lon}")]
 		public string Get(float lat, float lon)
 		{		
-			return $"Temp in (lat:{lat.ToString()}:lon:{lon.ToString()}) is C: "+GiveMeTemp(ReturnInfo(lat, lon));
+			return $"Temp in (lat:{lat.ToString()}-lon:{lon.ToString()}) is C: "+GiveMeTemp(ReturnInfo(lat, lon));
 		}
 
 		public static string GiveMeTemp(string forecast)
