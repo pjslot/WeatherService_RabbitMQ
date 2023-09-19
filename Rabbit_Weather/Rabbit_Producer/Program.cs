@@ -26,7 +26,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Rabbit_Weather
 {
-	internal class Program
+	public class Program
 	{
 		public static void Main(string[] args)
 		{

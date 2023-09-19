@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rabbit_Consumer
 {
-	internal class ForecastRabbit
+	public class ForecastRabbit
 	{
 		public string? cityName { get; set; }
 		public float temperature { get; set; }

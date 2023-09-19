@@ -11,7 +11,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 namespace Rabbit_Consumer
 {
-	internal class Program
+	public class Program
 	{
 		static void Main(string[] args)
 		{

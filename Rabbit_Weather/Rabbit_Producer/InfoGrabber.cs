@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Rabbit_Weather
 {
-	internal class InfoGrabber
+	public class InfoGrabber
 	{
 		//ручная печать прогноза для отладки
 		public static async Task PrintInfo (Location loc)
